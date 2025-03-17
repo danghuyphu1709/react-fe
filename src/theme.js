@@ -3,8 +3,8 @@ import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 // Tạo theme với chế độ sáng và tối
 const theme = extendTheme({
   custom: {
-    appBarHeigth :'48px',
-    boarBarHeigth: '50px',
+    appBarHeigth :'58px',
+    boarBarHeigth: '60px',
   },
   colorSchemes: {
     light: {

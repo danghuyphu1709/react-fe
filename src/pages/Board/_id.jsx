@@ -1,7 +1,8 @@
 import Container from "@mui/material/Container";
-import AppBar from "../../components/AppBar/AppBar";
+import AppBar from "~/components/AppBar/AppBar";
 import BoarBar from "./BoardBar/BoarBar";
-import BoardContent from "./BoardContent/BoardContent";
+import BoardContent from "./BoardContent/boardContent";
+
 
 function Board() {
   return (
@@ -11,9 +12,9 @@ function Board() {
         maxWidth={false}
         sx={{ height: "100vh", backgroundColor: "yellowgreen" }}
       >
-        <BoarBar />
+         <AppBar />
 
-        <AppBar />
+        <BoarBar />
 
         <BoardContent />
 
