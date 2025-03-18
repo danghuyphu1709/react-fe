@@ -12,7 +12,7 @@ import Badge from "@mui/material/Badge";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
 function AppBar() {
   return (
     <>
@@ -54,7 +54,7 @@ function AppBar() {
               <Templates />
               <Starred />
               <Recent />
-              <Button variant="outlined">Create</Button>
+              <Button variant="outlined" startIcon={<ControlPointIcon/>}>Create</Button>
 
               </Box>
               
