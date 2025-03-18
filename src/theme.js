@@ -1,24 +1,45 @@
+
 import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 
-// Tạo theme với chế độ sáng và tối
 const theme = extendTheme({
   custom: {
     appBarHeigth :'58px',
     boarBarHeigth: '60px',
+    textColorDefault:'#ff5252'
   },
   colorSchemes: {
     light: {
       palette: {
         primary: {
-          main: "#ff5252",
+          main: "#0099FF",
+        },
+      },
+    }, 
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform:'none',
         },
       },
     },
-    dark: {
-      palette: {
-        primary: {
-          main: "#000",
-        },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({theme}) => {
+          return {
+           color:theme.palette.primary.main,
+           fontSize:'0.875rem',
+           '.MuiOutlinedInput-notchedOutline':{
+            borderColor: theme.palette.primary.light
+           },
+           '&:hover':{
+            '.MuiOutlinedInput-notchedOutline':{
+              borderColor: theme.palette.primary.main
+             }
+           }
+          }
+        }
       },
     },
   },

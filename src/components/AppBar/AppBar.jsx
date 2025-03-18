@@ -41,7 +41,7 @@ function AppBar() {
           >
             <Typography
               variant="span"
-              sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "yellow" }}
+              sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "black" }}
             >
               Trello
             </Typography>
