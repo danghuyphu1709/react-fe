@@ -16,12 +16,14 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 function AppBar() {
   return (
     <>
-      <Box
+      <Box px={2}
         sx={{
           display: "flex",
           justifyContent: "space-between",
           width: "100%",
           height: (theme) => theme.custom.appBarHeigth,
+          gap: 2,
+          overflowX:'auto'
         }}
       >
         <Box
@@ -45,13 +47,20 @@ function AppBar() {
             >
               Trello
             </Typography>
+           
+              <Box sx={{ display:{ xs:'none',md:'flex' },gap:1 }}>
 
-            <WorkSpace />
-            <Templates />
-            <Starred />
-            <Recent />
-            <Button variant="outlined">Create</Button>
+              <WorkSpace />
+              <Templates />
+              <Starred />
+              <Recent />
+              <Button variant="outlined">Create</Button>
+
+              </Box>
+              
+
           </Box>
+
         </Box>
 
         <Box
@@ -66,6 +75,7 @@ function AppBar() {
             label="Search..."
             type="search"
             size="small"
+            sx={{ minWidth:120 }}
           />
           <Tooltip title="Notifications" sx={{ cursor: "pointer" }}>
             <Badge color="secondary" variant="dot">
@@ -75,7 +85,7 @@ function AppBar() {
           <Tooltip title="help" sx={{ cursor: "pointer" }}>
             <HelpOutlineIcon />
           </Tooltip>
-          <Profile/>
+          <Profile />
           Model selects
         </Box>
       </Box>
