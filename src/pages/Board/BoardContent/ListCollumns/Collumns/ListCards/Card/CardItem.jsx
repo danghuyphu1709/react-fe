@@ -9,42 +9,46 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-function CardItem() {
+function CardItem({ card }) {
+  const shouldShowCardActions = () => {
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length;
+  }
   return (
     <>
-     <Card
-          sx={{
-            cursor: "pointer",
-            boxShadow: "0 1px 1px rgba(0,0,0,0.2)",
-            overflow: "unset",
-          }}
-        >
-          <CardMedia
-            sx={{ height: 140 }}
-            image="https://img.pikbest.com/origin/09/41/85/916pIkbEsTzRC.jpg!bwr800"
-            title="green iguana"
-          />
-          <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
-            <Typography>Lizard</Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions sx={{ p: "0px 4px 8px 4px" }}>
-            <Button size="small" startIcon={<GroupIcon />}>
-              20
-            </Button>
-            <Button size="small" startIcon={<CommentIcon />}>
-              15
-            </Button>
-            <Button size="small" startIcon={<AttachmentIcon />}>
-              10
-            </Button>
-          </CardActions>
-        </Card>
+      <Card
+        sx={{
+          cursor: "pointer",
+          boxShadow: "0 1px 1px rgba(0,0,0,0.2)",
+          overflow: "unset",
+        }}
+      >
+        
+        {card?.cover &&  <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
+
+        <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
+          <Typography>{card?.title}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {card?.description}
+          </Typography>
+        </CardContent>
+        
+        { shouldShowCardActions() &&
+
+        <CardActions sx={{ p: "0px 4px 8px 4px" }}>
+
+        {!!card?.memberIds?.length &&  <Button size="small" startIcon={<GroupIcon />}> { card?.memberIds?.length } </Button>}
+ 
+        {!!card?.comments?.length && <Button size="small" startIcon={<CommentIcon />}> { card?.comments?.length } </Button>}
+  
+        {!!card?.attachments?.length && <Button size="small" startIcon={<AttachmentIcon />}> { card?.attachments?.length } </Button> }
+
+        </CardActions>
+
+        }
+        
+      </Card>
     </>
-  )
+  );
 }
 
-export default CardItem
+export default CardItem;

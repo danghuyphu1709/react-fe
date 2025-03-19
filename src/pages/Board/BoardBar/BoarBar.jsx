@@ -7,7 +7,7 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { Avatar, AvatarGroup, Button, Tooltip } from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-function BoarBar() {
+function BoarBar({ board }) {
   return (
     <>
       <Box
@@ -37,7 +37,7 @@ function BoarBar() {
               },
             }}
             icon={<DashboardIcon />}
-            label="DashBoard"
+            label={ board?.title }
             clickable
           />
           <Chip
@@ -53,7 +53,7 @@ function BoarBar() {
               },
             }}
             icon={<VpnLockIcon />}
-            label="Public/Private/WorkSpace"
+            label={ board?.type }
             clickable
           />
 

@@ -4,7 +4,7 @@ import Collumns from "./Collumns/Collumns";
 import { Button } from "@mui/material";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 
-function ListCollumns() {
+function ListCollumns({ collumns }) {
   return (
     <>
       <Box
@@ -18,9 +18,9 @@ function ListCollumns() {
           "&::-webkit-scrollbar-track": { m: 2 },
         }}
       >
-        <Collumns />
-        <Collumns />
-
+        { collumns?.map((collumn)=>{
+           return <Collumns key={collumn._id} collumn={collumn} />
+        }) }
         <Box
           sx={{
             minWidth: "200px",

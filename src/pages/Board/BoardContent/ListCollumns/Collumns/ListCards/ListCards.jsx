@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import CardItem from "./Card/CardItem";
 
-function ListCards() {
+function ListCards({ cards }) {
   return (
     <>
       <Box
@@ -31,7 +31,10 @@ function ListCards() {
           },
         }}
       >
-       <CardItem/>
+        { cards?.map((card) =>{
+          return <CardItem key={card._id} card={card} />
+        }) }
+       
     </Box>
     </>
   );
