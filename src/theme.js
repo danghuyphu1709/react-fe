@@ -3,18 +3,23 @@ import { experimental_extendTheme as extendTheme } from "@mui/material/styles";
 const APP_BAR_HEIGHT = "58px";
 const BOARD_BAR_HEIGHT = "58px";
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`;
+const COLLUM_HEADER_HEIGHT = "50px";
+const COLLUM_FOOTER_HEIGHT = "56px";
 
 const theme = extendTheme({
   custom: {
     appBarHeigth: BOARD_BAR_HEIGHT,
     boarBarHeigth: BOARD_BAR_HEIGHT,
     BoardContentHeigth: BOARD_CONTENT_HEIGHT,
+    CollumnHeaderHeigth: COLLUM_HEADER_HEIGHT,
+    CollumnFooterHeigth: COLLUM_FOOTER_HEIGHT,
   },
   colorSchemes: {
     light: {
       palette: {
         primary: {
           main: "#0099FF",
+          DarkSlateGray1: "#97FFFF",
         },
       },
     },
@@ -63,7 +68,7 @@ const theme = extendTheme({
             },
             "&:hover": {
               ".MuiOutlinedInput-notchedOutline": {
-                borderColor: theme.palette.primary.main,
+                borderColor: theme.palette.primary.dark,
               },
             },
           };

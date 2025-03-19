@@ -9,7 +9,7 @@ function Board() {
       <Container
         disableGutters
         maxWidth={false}
-        sx={{ height: "100vh"}}
+        sx={{ height: "100vh" , backgroundColor:'#B0E2FF' }}
       >
          <AppBar />
 
