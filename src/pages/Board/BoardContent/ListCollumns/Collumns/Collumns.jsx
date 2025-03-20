@@ -10,7 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Cloud from "@mui/icons-material/Cloud";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Tooltip from "@mui/material/Tooltip";
-import { ContentCopy, ContentPaste } from "@mui/icons-material";
+import { ContentCopy, ContentPaste, Opacity } from "@mui/icons-material";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import Button from "@mui/material/Button";
@@ -18,7 +18,20 @@ import Box from "@mui/material/Box";
 import ListCards from "./ListCards/ListCards";
 import { mapOrder } from "~/utils/sorts";
 
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 function Collumns({ collumn }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging  } =
+    useSortable({ id: collumn._id, data: { ...collumn } });
+
+  const dndKitColumnStyle = {
+    touchAction: "none",
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : undefined
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -28,13 +41,16 @@ function Collumns({ collumn }) {
     setAnchorEl(null);
   };
 
-  console.log()
-  const orderdCards = mapOrder(collumn?.cards,collumn?.cardOrderIds,'_id');
+  const orderdCards = mapOrder(collumn?.cards, collumn?.cardOrderIds, "_id");
 
   return (
-    <>
-      {/* collum */}
+    <div
+      ref={setNodeRef}
+      style={dndKitColumnStyle}
+      {...attributes}
+    >
       <Box
+         {...listeners}
         sx={{
           minWidth: "300px",
           maxWidth: "300px",
@@ -148,7 +164,7 @@ function Collumns({ collumn }) {
           </Tooltip>
         </Box>
       </Box>
-    </>
+    </div>
   );
 }
 
