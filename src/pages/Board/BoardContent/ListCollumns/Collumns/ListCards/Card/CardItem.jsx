@@ -67,22 +67,22 @@ function CardItem({ card }) {
           <CardActions sx={{ p: "0px 4px 8px 4px" }}>
             {!!card?.memberIds?.length && (
               <Button size="small" startIcon={<GroupIcon />}>
-                {" "}
-                {card?.memberIds?.length}{" "}
+                
+                {card?.memberIds?.length}
               </Button>
             )}
 
             {!!card?.comments?.length && (
               <Button size="small" startIcon={<CommentIcon />}>
-                {" "}
-                {card?.comments?.length}{" "}
+                
+                {card?.comments?.length}
               </Button>
             )}
 
             {!!card?.attachments?.length && (
               <Button size="small" startIcon={<AttachmentIcon />}>
-                {" "}
-                {card?.attachments?.length}{" "}
+                
+                {card?.attachments?.length}
               </Button>
             )}
           </CardActions>
