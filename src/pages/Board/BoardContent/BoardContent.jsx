@@ -9,6 +9,7 @@ import {
   useSensors,
   DragOverlay,
   defaultDropAnimationSideEffects,
+  closestCorners,
 } from "@dnd-kit/core";
 import { useState, useEffect } from "react";
 import { arrayMove } from "@dnd-kit/sortable";
@@ -46,6 +47,9 @@ function BoardContent({ board }) {
 
   const [activeDragItemData, setActiveDragItemData] = useState(null);
 
+  const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] =
+    useState(null);
+
   const handleDragStart = (event) => {
     setActiveDragItemId(event?.active?.id);
     setActiveDragItemType(
@@ -53,25 +57,83 @@ function BoardContent({ board }) {
         ? ACTIVE_DRAG_ITEM_TYPE.CARD
         : ACTIVE_DRAG_ITEM_TYPE.COLUMNS
     );
+    if (event?.active?.data?.current?.columnId) {
+      setOldColumnWhenDraggingCard(findColumnByCardId(event?.active?.id));
+    }
+
     setActiveDragItemData(event?.active?.data?.current);
   };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over) return;
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      const {
+        id: activeDraggingCardId,
+        data: { current: activeDraggingCardData },
+      } = active;
 
-    if (active.id !== over.id) {
-      const oldIndex = orderedColumn.findIndex((c) => c._id === active.id);
+      const { id: overDraggingCardId } = over;
 
-      const newIndex = orderedColumn.findIndex((c) => c._id === over.id);
+      const activeColumn = findColumnByCardId(activeDraggingCardId);
+      const overColumn = findColumnByCardId(overDraggingCardId);
+      if (!activeColumn || !overColumn) return;
 
-      const dndOrderedColumns = arrayMove(orderedColumn, oldIndex, newIndex);
+      if (oldColumnWhenDraggingCard._id !== overColumn._id) {
+        console.log("Hanh đông kéo tha giua 2 collumns khac nhau");
+      } else {
+        const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(
+          (c) => c._id === activeDragItemId
+        );
 
-      setOrderedColumnState(dndOrderedColumns);
+        const newCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(
+          (c) => c._id === overDraggingCardId
+        );
+
+        const dndOrderedCards = arrayMove(
+          oldColumnWhenDraggingCard?.cards,
+          oldCardIndex,
+          newCardIndex
+        );
+
+        setOrderedColumnState((prevColumn) => {
+          const nextColumn = cloneDeep(prevColumn);
+          const targetColumn = nextColumn.find(
+            (column) => column._id === overColumn._id
+          );
+          
+          targetColumn.cards = dndOrderedCards;
+
+          targetColumn.cardOrderIds = dndOrderedCards.map((card) => card._id);
+          return nextColumn;
+        });
+        
+      }
+    }
+
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMNS) {
+      if (active.id !== over.id) {
+        const oldColumnIndex = orderedColumn.findIndex(
+          (c) => c._id === active.id
+        );
+
+        const newColumnIndex = orderedColumn.findIndex(
+          (c) => c._id === over.id
+        );
+
+        const dndOrderedColumns = arrayMove(
+          orderedColumn,
+          oldColumnIndex,
+          newColumnIndex
+        );
+
+        setOrderedColumnState(dndOrderedColumns);
+      }
     }
     setActiveDragItemId(null);
     setActiveDragItemType(null);
     setActiveDragItemData(null);
+    setOldColumnWhenDraggingCard(null);
   };
 
   const handleDragOver = (event) => {
@@ -92,7 +154,7 @@ function BoardContent({ board }) {
     const overColumn = findColumnByCardId(overDraggingCardId);
     if (!activeColumn || !overColumn) return;
 
-    if (activeColumn._id != overColumn._id) {
+    if (activeColumn._id !== overColumn._id) {
       setOrderedColumnState((prevColumn) => {
         const overCardIndex = overColumn?.cards?.findIndex(
           (card) => card._id === overDraggingCardId
@@ -166,6 +228,7 @@ function BoardContent({ board }) {
       sensors={mySensors}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
+      collisionDetection={closestCorners}
     >
       <Box
         sx={{
