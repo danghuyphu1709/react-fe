@@ -19,7 +19,8 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMNS: "ACTIVE_DRAG_ITEM_TYPE_COLUMNS",
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEmpty } from "lodash";
+import { generatePlaceholderCard } from "~/utils/formatter";
 
 function BoardContent({ board }) {
   const pointerSensor = useSensor(PointerSensor, {
@@ -80,7 +81,74 @@ function BoardContent({ board }) {
       if (!activeColumn || !overColumn) return;
 
       if (oldColumnWhenDraggingCard._id !== overColumn._id) {
-        console.log("Hanh đông kéo tha giua 2 collumns khac nhau");
+        setOrderedColumnState((prevColumn) => {
+          const overCardIndex = overColumn?.cards?.findIndex(
+            (card) => card._id === overDraggingCardId
+          );
+
+          let newCardIndex;
+
+          const isBelowOverItem =
+            active.rect.current.translated &&
+            active.rect.current.translated.top >
+              over.rect.top + over.rect.height;
+
+          const modifier = isBelowOverItem ? 1 : 0;
+
+          newCardIndex =
+            overCardIndex >= 0
+              ? overCardIndex + modifier
+              : overColumn?.cards?.length + 1;
+
+          const nextColumn = cloneDeep(prevColumn);
+          const nextActiveColumn = nextColumn.find(
+            (column) => column._id === activeColumn._id
+          );
+          const nextOverColumn = nextColumn.find(
+            (column) => column._id === overColumn._id
+          );
+
+          if (nextActiveColumn) {
+            nextActiveColumn.cards = nextActiveColumn.cards.filter(
+              (card) => card._id !== activeDraggingCardId
+            );
+
+            if (isEmpty(nextActiveColumn.cards)) {
+              nextActiveColumn.cards = [
+                generatePlaceholderCard(nextActiveColumn),
+              ];
+            }
+
+            // cap nhat lai mang
+            nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
+              (card) => card._id
+            );
+          }
+
+          if (nextOverColumn) {
+            nextOverColumn.cards = nextOverColumn.cards.filter(
+              (card) => card._id !== activeDraggingCardId
+            );
+
+            const rebuild_draggingCardData = {
+              ...activeDragItemData,
+              columnId: nextOverColumn._id,
+            };
+
+            nextOverColumn.cards = nextOverColumn.cards.toSpliced(
+              newCardIndex,
+              0,
+              rebuild_draggingCardData
+            );
+
+            nextOverColumn.cards = nextOverColumn.cards.filter(card => !card.FE_PlaceholderCard);
+
+            nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
+              (card) => card._id
+            );
+          }
+          return nextColumn;
+        });
       } else {
         const oldCardIndex = oldColumnWhenDraggingCard?.cards?.findIndex(
           (c) => c._id === activeDragItemId
@@ -101,13 +169,12 @@ function BoardContent({ board }) {
           const targetColumn = nextColumn.find(
             (column) => column._id === overColumn._id
           );
-          
+
           targetColumn.cards = dndOrderedCards;
 
           targetColumn.cardOrderIds = dndOrderedCards.map((card) => card._id);
           return nextColumn;
         });
-        
       }
     }
 
@@ -186,6 +253,12 @@ function BoardContent({ board }) {
             (card) => card._id !== activeDraggingCardId
           );
 
+          if (isEmpty(nextActiveColumn.cards)) {
+            nextActiveColumn.cards = [
+              generatePlaceholderCard(nextActiveColumn),
+            ];
+          }
+
           // cap nhat lai mang
           nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
             (card) => card._id
@@ -197,16 +270,24 @@ function BoardContent({ board }) {
             (card) => card._id !== activeDraggingCardId
           );
 
+          const rebuild_draggingCardData = {
+            ...activeDragItemData,
+            columnId: nextOverColumn._id,
+          };
           nextOverColumn.cards = nextOverColumn.cards.toSpliced(
             newCardIndex,
             0,
-            activeDraggingCardData
+            rebuild_draggingCardData
           );
+          
+          nextOverColumn.cards = nextOverColumn.cards.filter(card => !card.FE_PlaceholderCard);
 
           nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
             (card) => card._id
           );
         }
+        
+        console.log("🚀 ~ setOrderedColumnState ~ nextColumn:", nextColumn)
         return nextColumn;
       });
     }
