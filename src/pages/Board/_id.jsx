@@ -5,32 +5,29 @@ import BoarBar from "./BoardBar/BoarBar";
 import BoardContent from "./BoardContent/boardContent";
 import { mockData } from "~/apis/mock-data";
 import { fetchBoardDetailsAPI } from "~/apis";
-function Board() {
-  const [board, setBoard] = useState(null);
-  useEffect(() => {
-    // call api
-    const boardId = "67fe206fd1bc2a9f3870482e";
-    fetchBoardDetailsAPI(boardId).then((board) => {
-      setBoard(board);
-    });
 
-    console.log("🚀 ~ Board ~ board:", board);
+function Board() {
+  const [boardData, setBoard] = useState(null);
+
+  useEffect(() => {
+    const boardId = "6800a6c9adf63563c7f6c819";
+    fetchBoardDetailsAPI(boardId).then((res) => {
+      if (res?.status) setBoard(res.data);
+    });
   }, []);
 
+  if (!boardData) return <div>Đang tải dữ liệu...</div>;
+
   return (
-    <>
-      <Container
-        disableGutters
-        maxWidth={false}
-        sx={{ height: "100vh", backgroundColor: "#B0E2FF" }}
-      >
-        <AppBar />
-
-        <BoarBar board={mockData?.board} />
-
-        <BoardContent board={mockData?.board} />
-      </Container>
-    </>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{ height: "100vh", backgroundColor: "#B0E2FF" }}
+    >
+      <AppBar />
+      <BoarBar board={boardData} />
+      <BoardContent board={boardData} />
+    </Container>
   );
 }
 

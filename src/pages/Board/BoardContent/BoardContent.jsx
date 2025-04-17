@@ -23,6 +23,7 @@ import { cloneDeep, isEmpty } from "lodash";
 import { generatePlaceholderCard } from "~/utils/formatter";
 
 function BoardContent({ board }) {
+  console.log("🚀 ~ BoardContent ~ board:", board?.columns)
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: { distance: 10 },
   });
