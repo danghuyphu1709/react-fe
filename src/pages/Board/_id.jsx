@@ -3,7 +3,6 @@ import Container from "@mui/material/Container";
 import AppBar from "~/components/AppBar/AppBar";
 import BoarBar from "./BoardBar/BoarBar";
 import BoardContent from "./BoardContent/boardContent";
-import { mockData } from "~/apis/mock-data";
 import { fetchBoardDetailsAPI } from "~/apis";
 
 function Board() {
@@ -15,8 +14,6 @@ function Board() {
       if (res?.status) setBoard(res.data);
     });
   }, []);
-
-  if (!boardData) return <div>Đang tải dữ liệu...</div>;
 
   return (
     <Container

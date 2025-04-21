@@ -7,10 +7,17 @@ import {
   SortableContext,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useState } from "react";
 
 function ListCollumns({ collumns }) {
+  const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
+  const toggleOpenNewColumnForm = () =>
+    setOpenNewColumnForm(!openNewColumnForm);
   return (
-    <SortableContext items={collumns.map(c => c._id)} strategy={horizontalListSortingStrategy}>
+    <SortableContext
+      items={collumns.map((c) => c._id)}
+      strategy={horizontalListSortingStrategy}
+    >
       <Box
         sx={{
           bgcolor: "inherit",
@@ -25,23 +32,42 @@ function ListCollumns({ collumns }) {
         {collumns?.map((collumn) => {
           return <Collumns key={collumn._id} collumn={collumn} />;
         })}
-        <Box
-          sx={{
-            minWidth: "200px",
-            maxWidth: "200px",
-            mx: 2,
-            borderRadius: "6px",
-            height: "fit-content",
-            bgcolor: "#ffffff3d",
-          }}
-        >
-          <Button
-            sx={{ color: "primary.ligth", width: "100%" }}
-            startIcon={<NoteAddIcon />}
+        {!openNewColumnForm ? (
+          <Box
+            sx={{
+              minWidth: "250px",
+              maxWidth: "250px",
+              mx: 2,
+              borderRadius: "6px",
+              height: "fit-content",
+              bgcolor: "#ffffff3d",
+            }}
           >
-            Add new collumn
-          </Button>
-        </Box>
+            <Button
+              sx={{ color: "primary.ligth", width: "100%" }}
+              startIcon={<NoteAddIcon />}
+            >
+              Add new collumn
+            </Button>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              inWidth: "250px",
+              maxWidth: "250px",
+              mx: 2,
+              p:1,
+              borderRadius: "6px",
+              height: "fit-content",
+              bgcolor: "#ffffff3d",
+              display: 'flex',
+              flexDirection:'column',
+              gap:'1'
+            }}
+          >
+            Form tạo mới columns
+          </Box>
+        )}
       </Box>
     </SortableContext>
   );
